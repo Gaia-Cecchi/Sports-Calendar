@@ -3,11 +3,5 @@
     "api/scrape-*.js": {
       "maxDuration": 30
     }
-  },
-  "crons": [
-    {
-      "path": "/api/update-cache",
-      "schedule": "0 */6 * * *"
-    }
-  ]
+  }
 }

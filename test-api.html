@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API Sport Calendar</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        .loading { background: #fff3cd; border-color: #ffeaa7; }
+        button { padding: 10px 20px; margin: 5px; }
+        pre { background: #f8f9fa; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test API Sport Calendar</h1>
+    <p>Questo test verifica se le API funzionano nel tuo ambiente.</p>
+    
+    <button onclick="testAll()">🚀 Testa Tutto</button>
+    <button onclick="clearResults()">🧹 Pulisci</button>
+    
+    <div id="results"></div>
+
+    <script>
+        async function testAll() {
+            clearResults();
+            
+            await testConnectivity();
+            await testErgastAPI();
+            await testProxies();
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        function addResult(title, status, message, data = null) {
+            const div = document.createElement('div');
+            div.className = `test ${status}`;
+            div.innerHTML = `
+                <h3>${title}</h3>
+                <p>${message}</p>
+                ${data ? `<pre>${JSON.stringify(data, null, 2)}</pre>` : ''}
+            `;
+            document.getElementById('results').appendChild(div);
+        }
+        
+        async function testConnectivity() {
+            addResult('🌐 Test Connettività', 'loading', 'Testando connessione internet...');
+            
+            try {
+                const response = await fetch('https://httpbin.org/get');
+                const data = await response.json();
+                addResult('🌐 Test Connettività', 'success', 'Connessione internet OK!', {
+                    status: response.status,
+                    origin: data.origin
+                });
+            } catch (error) {
+                addResult('🌐 Test Connettività', 'error', `Errore connessione: ${error.message}`);
+            }
+        }
+        
+        async function testErgastAPI() {
+            addResult('🏎️ Test API Ergast F1', 'loading', 'Testando API Formula 1...');
+            
+            try {
+                const response = await fetch('https://ergast.com/api/f1/current.json');
+                const data = await response.json();
+                
+                if (data.MRData?.RaceTable?.Races) {
+                    const races = data.MRData.RaceTable.Races;
+                    addResult('🏎️ Test API Ergast F1', 'success', 
+                        `API F1 funziona! Trovate ${races.length} gare per la stagione ${data.MRData.RaceTable.season}`, 
+                        races.slice(0, 2) // Mostra solo le prime 2 gare
+                    );
+                } else {
+                    addResult('🏎️ Test API Ergast F1', 'error', 'API F1 risponde ma senza dati gare');
+                }
+            } catch (error) {
+                addResult('🏎️ Test API Ergast F1', 'error', `Errore API F1: ${error.message}`);
+            }
+        }
+        
+        async function testProxies() {
+            const proxies = [
+                { name: 'AllOrigins', url: 'https://api.allorigins.win/get?url=' },
+                { name: 'CodeTabs', url: 'https://api.codetabs.com/v1/proxy?quest=' }
+            ];
+            
+            for (const proxy of proxies) {
+                addResult(`🔄 Test Proxy ${proxy.name}`, 'loading', `Testando proxy ${proxy.name}...`);
+                
+                try {
+                    const testUrl = encodeURIComponent('https://httpbin.org/get');
+                    const response = await fetch(proxy.url + testUrl, {
+                        headers: {
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        addResult(`🔄 Test Proxy ${proxy.name}`, 'success', 
+                            `Proxy ${proxy.name} funziona!`, 
+                            { status: response.status, hasContents: !!data.contents }
+                        );
+                    } else {
+                        addResult(`🔄 Test Proxy ${proxy.name}`, 'error', 
+                            `Proxy ${proxy.name} errore: ${response.status} ${response.statusText}`);
+                    }
+                } catch (error) {
+                    addResult(`🔄 Test Proxy ${proxy.name}`, 'error', 
+                        `Proxy ${proxy.name} fallito: ${error.message}`);
+                }
+            }
+        }
+        
+        // Test automatico all'avvio
+        window.addEventListener('load', () => {
+            setTimeout(testAll, 1000);
+        });
+    </script>
+</body>
+</html>

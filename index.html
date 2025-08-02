@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sport Calendar - Calendario Eventi Sportivi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="header-text">
+                    <h1><i class="fas fa-calendar-alt"></i> Sport Calendar</h1>
+                    <p>I tuoi eventi sportivi preferiti in un unico posto</p>
+                </div>
+                <button id="themeToggle" class="theme-toggle" title="Passa al tema scuro">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="filters">
+            <h2>Filtra per Sport <span class="filter-help">(Clicca per selezionare/deselezionare)</span></h2>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-sport="all">
+                    <i class="fas fa-globe"></i> Tutti
+                </button>
+                <button class="filter-btn" data-sport="f1">
+                    <i class="fas fa-flag-checkered"></i> Formula 1
+                </button>
+                <button class="filter-btn" data-sport="motogp">
+                    <i class="fas fa-motorcycle"></i> Moto GP
+                </button>
+                <button class="filter-btn" data-sport="volley">
+                    <i class="fas fa-volleyball-ball"></i> Volley
+                </button>
+                <button class="filter-btn" data-sport="scherma">
+                    <i class="fas fa-sword"></i> Scherma
+                </button>
+                <button class="filter-btn" data-sport="nuoto">
+                    <i class="fas fa-swimmer"></i> Nuoto
+                </button>
+            </div>
+        </div>
+
+        <div class="controls-section">
+            <div class="update-info">
+                <div id="lastUpdate" class="last-update">Caricamento eventi...</div>
+                <button id="refreshEvents" class="btn-refresh">
+                    <i class="fas fa-sync-alt"></i> Aggiorna Calendario
+                </button>
+            </div>
+        </div>
+
+        <div class="export-section">
+            <h2>Esporta Eventi</h2>
+            <div class="export-controls">
+                <button id="selectAll" class="btn-secondary">Seleziona Tutti</button>
+                <button id="deselectAll" class="btn-secondary">Deseleziona Tutti</button>
+                <button id="exportSelected" class="btn-primary">
+                    <i class="fas fa-download"></i> Esporta Selezionati (.ics)
+                </button>
+            </div>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <span id="loadingText">Caricamento eventi in corso...</span>
+            </div>
+            <div class="loading-details">
+                <small>Connessione alle API sportive...</small>
+            </div>
+        </div>
+
+        <div class="events-container">
+            <div id="eventsGrid" class="events-grid">
+                <!-- Gli eventi verranno caricati dinamicamente -->
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Sport Calendar - Tutti i diritti riservati</p>
+        </div>
+    </footer>
+
+    <script src="api-config.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
